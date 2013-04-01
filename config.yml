@@ -1,0 +1,10 @@
+leap:
+  item-enabled: true
+  item-id: 261
+  consumes-item: false
+recycle:
+  size: 54
+  auto-empty: true
+  empty-interval: 30
+  notify-empty: true
+  bin-name: Recycle Bin

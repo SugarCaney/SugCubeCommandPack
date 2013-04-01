@@ -1,0 +1,20 @@
+name: SugCubeCommandPack
+main: nl.SugCube.sccp.Main.sccp
+version: 'BET-0.1.2'
+description: >
+             Extra commandpack made by MrSugarCaney
+commands:
+  shoot:
+    description: Shoot somebody into the air! (/sccp for help)
+  leap:
+    description: A decent jump (/sccp for help)
+  mutes:
+    description: Mute a player (/sccp for help)
+  firework:
+    description: Set off firework at players' locations (/sccp for help)
+  drunk:
+    description: Gives a player Nausea (/sccp for help) 
+  recycle:
+    description: Opens the GLOBAL recycle bin (/sccp for help)
+  sccp:
+    description: Shows the help of the sccp commands. (/sccp for help)

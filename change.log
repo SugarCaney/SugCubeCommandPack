@@ -1,0 +1,9 @@
+**-----{ DEV-0.1.2 }-----**
++ Added help-command (/sccp)
++ Added config support for:
+  + /leap
+  + /recycle
+  + recycle interval emptying
+
+**-----{ DEV-0.1.1 }-----**
+First release
