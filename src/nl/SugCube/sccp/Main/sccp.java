@@ -9,6 +9,7 @@ import nl.SugCube.sccp.Count.CountLeap;
 import nl.SugCube.sccp.Count.RecycleClear;
 import nl.SugCube.sccp.Listeners.ChatListener;
 import nl.SugCube.sccp.Listeners.PlayerListener;
+import nl.SugCube.sccp.Listeners.ServerListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -44,6 +45,7 @@ public class sccp extends JavaPlugin {
 	public CountLeap cl = new CountLeap();
 	public PlayerListener pll = new PlayerListener();
 	public ChatListener chl = new ChatListener();
+	public ServerListener svl = new ServerListener();
 	public Methods m = new Methods(this);
 	public static Inventory recycleBin;
 	
@@ -72,6 +74,8 @@ public class sccp extends JavaPlugin {
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(pll, this);
 		pm.registerEvents(chl, this);
+		pm.registerEvents(svl, this);
+		
 		recycleBin = Bukkit.createInventory(null, getConfig().getInt("recycle.size"), getConfig().getString("recycle.bin-name"));
 		
 		//Auto-empty recycle loop
@@ -87,6 +91,7 @@ public class sccp extends JavaPlugin {
 		pll.setLeapItemId(leapItemId);
 		pll.setLeapItem(leapItem);
 		pll.setDeleteLeap(getConfig().getBoolean("leap.consumes-item"));
+		svl.setPing(getConfig().getString("motd.motd"));
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -102,7 +107,7 @@ public class sccp extends JavaPlugin {
 			}
 		}
 		
-		if (label.equalsIgnoreCase("recycle")) {
+		else if (label.equalsIgnoreCase("recycle")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				if (player.hasPermission("sccp.recycle")) {

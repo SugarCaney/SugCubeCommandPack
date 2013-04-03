@@ -1,10 +1,28 @@
 leap:
+  #Boolean 	Dis/Enable itembinding /leap to an item
   item-enabled: true
+  #Integer	Sets the item which executes /leap (requires item-eanbled = true)
   item-id: 261
+  #Boolean	When set to true, each item-use will consume one item
   consumes-item: false
 recycle:
+  #Integer	Sets the amount of slots inside the Recycle Bin
   size: 54
+  #Boolean	Dis/Enable automatic emptying of the Recycle Bin
   auto-empty: true
+  #Integer	Sets the interval to a certain amount of minutes
   empty-interval: 30
+  #Boolean	Broadcast a message when the Bin gets emptied
   notify-empty: true
+  #String	Name your Recycle Bin to your wishes
   bin-name: Recycle Bin
+motd:
+  #String	Give your server a color-supported MOTD
+  #Color Reference:		&0	BLACK		&1	DARK BLUE		&2	DARK GREEN
+  #						&3	CYAN		&4	DARK RED		&5	PURPLE
+  #						&6	GOLD		&7	GRAY			&8	DARK GRAY
+  #						&9	INDIGO		&a	LIME			&b	AQUA
+  #						&c	RED			&d	MAGENTA			&e	YELLOW
+  #						&f	WHITE		&k	MAGIC			&l	BOLD
+  #		&r	RESET		&m	STRIKE		&n	UNDERLINE		&o	ITALIC
+  motd: 'A Minecraft Server'

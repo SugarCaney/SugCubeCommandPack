@@ -19,5 +19,4 @@ public class ChatListener implements Listener {
 			player.sendMessage(ChatColor.RED + "[!!] You have been muted! You can't talk!");
 		}
 	}
-	
 }
