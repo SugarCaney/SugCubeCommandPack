@@ -1,6 +1,6 @@
 name: SugCubeCommandPack
 main: nl.SugCube.sccp.Main.sccp
-version: 'BET-0.1.2'
+version: 'BET-0.2.0'
 description: >
              Extra commandpack made by MrSugarCaney
 commands:
@@ -18,3 +18,7 @@ commands:
     description: Opens the GLOBAL recycle bin (/sccp for help)
   sccp:
     description: Shows the help of the sccp commands. (/sccp for help)
+  stopwatch:
+    description: Stopwatch-Function. (/sccp for help)
+  sw:
+    description: Stopwatch-Function. (/sccp for help)

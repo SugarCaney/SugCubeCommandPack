@@ -41,21 +41,27 @@ public class sccp extends JavaPlugin {
 	//ArrayList containing frozen-players
 	public static List<Player> frozenPlayers = new ArrayList<Player>();
 	
+	//ArrayList containing players who have activated stopwatch
+	public static List<Player> swPlayers = new ArrayList<Player>();
+	public static List<Player> swActionDamage = new ArrayList<Player>();
+	public static List<Player> swActionLeftClick = new ArrayList<Player>();
+	public static List<Player> swActionRightClick = new ArrayList<Player>();
+	public static List<Player> swActionDeath = new ArrayList<Player>();
+	public static List<Player> swActionStarve = new ArrayList<Player>();
+	
 	//Calling supporting classes
 	public CountLeap cl = new CountLeap();
-	public PlayerListener pll = new PlayerListener();
+	public PlayerListener pll = new PlayerListener(this);
 	public ChatListener chl = new ChatListener();
 	public ServerListener svl = new ServerListener();
 	public Methods m = new Methods(this);
 	public static Inventory recycleBin;
 	
-	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info("[" + pdfFile.getName() + "] " + pdfFile.getVersion() + " Has Been Disabled");
 	}
 	
-	@Override
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info("[" + pdfFile.getName() + "] " + pdfFile.getVersion() + " Has Been Enabled");
@@ -76,7 +82,7 @@ public class sccp extends JavaPlugin {
 		pm.registerEvents(chl, this);
 		pm.registerEvents(svl, this);
 		
-		recycleBin = Bukkit.createInventory(null, getConfig().getInt("recycle.size"), getConfig().getString("recycle.bin-name"));
+		recycleBin = Bukkit.createInventory(null, getConfig().getInt("recycle.size"), Methods.setColors(getConfig().getString("recycle.bin-name")));
 		
 		//Auto-empty recycle loop
 		if (getConfig().getBoolean("recycle.auto-empty")) {
@@ -96,7 +102,74 @@ public class sccp extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (label.equalsIgnoreCase("sccp")) {
+		if (label.equalsIgnoreCase("stopwatch") || label.equalsIgnoreCase("sw")) {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				if (player.hasPermission("sccp.stopwatch")) {
+					if (args.length > 0) {
+						if (args[0].equalsIgnoreCase("stop")) {
+							if (swPlayers.contains(player)) {
+								swPlayers.remove(player);
+								swActionDamage.remove(player);
+								swActionLeftClick.remove(player);
+								swActionRightClick.remove(player);
+								swActionDeath.remove(player);
+								swActionStarve.remove(player);
+							}
+						} else if (args[0].equalsIgnoreCase("start")) {
+							if (args.length == 1) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop on use of &e/sw stop&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("damage")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionDamage.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you get &edamaged&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("leftclick")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionLeftClick.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you &eLeft Click&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("rightclick")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionRightClick.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you &eRight Click&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("death")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionDeath.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you &edie&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("starve")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionStarve.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you start &estarving&a."));
+								}
+							} else {
+								Help.stopwatchHelp(player);
+							}
+						} else {
+							Help.stopwatchHelp(player);
+						}
+					} else {
+						Help.stopwatchHelp(player);
+					}
+				} else {
+					player.sendMessage(ChatColor.RED + "[!!] You do not have permission to perform this command!");
+				}
+			} else {
+				System.out.println("Only In-game Players can perform this command!");
+			}
+		}
+		
+		else if (label.equalsIgnoreCase("sccp")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				Help.setLeapId(leapItemId);
@@ -133,6 +206,8 @@ public class sccp extends JavaPlugin {
 						Player target = getServer().getPlayer(args[0]);
 						Methods.giveNausea(target, Integer.parseInt(args[1]));
 					}
+				} else {
+					player.sendMessage(ChatColor.RED + "[!!] You do not have permission to perform this command!");
 				}
 			} else {
 				System.out.println("Only In-game Players can perform this command!");
@@ -144,6 +219,8 @@ public class sccp extends JavaPlugin {
 				Player player = (Player) sender;
 				if (player.hasPermission("sccp.firework")) {
 					Methods.shootFirework();
+				} else {
+					player.sendMessage(ChatColor.RED + "[!!] You do not have permission to perform this command!");
 				}
 			} else {
 				System.out.println("Only In-game Players can perform this command!");

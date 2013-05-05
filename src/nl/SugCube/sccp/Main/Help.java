@@ -60,6 +60,11 @@ public class Help {
 					ChatColor.YELLOW + "/recycle " +
 					ChatColor.ITALIC + ChatColor.AQUA + "Open the global Recycle Bin");
 		}
+		if (player.hasPermission("sccp.stopwatch")) {
+			player.sendMessage(
+					ChatColor.YELLOW + "/sw <start|stop> [stop cause] " +
+					ChatColor.ITALIC + ChatColor.AQUA + "Use the server's stopwatch");
+		}
 	}
 	
 	//Return help by incorrectly using /mutes
@@ -72,6 +77,25 @@ public class Help {
 				ChatColor.YELLOW + "**");
 		player.sendMessage(
 				ChatColor.GOLD + "Usage: /mutes <player to (un)mute>");
+	}
+	
+	//Return help by incorrectly using /stopwatch or /sw
+	public static void stopwatchHelp(Player player) {
+		player.sendMessage(
+				ChatColor.YELLOW + "**" +
+				ChatColor.GREEN + "-----=={" +
+				ChatColor.YELLOW + " SugCubeCommandPack-Help " +
+				ChatColor.GREEN + "}==-----" +
+				ChatColor.YELLOW + "**");
+		player.sendMessage(
+				ChatColor.GOLD + "Usage: /sw <start|stop> [alternative stop cause]");
+		player.sendMessage(
+				ChatColor.AQUA + "Alternative causes (not required)");
+		player.sendMessage(Methods.setColors("&6damage &a| &fStops by taking damage"));
+		player.sendMessage(Methods.setColors("&6leftclick &a| &fStops by left clicking"));
+		player.sendMessage(Methods.setColors("&6rightclick &a| &fStops by right clicking with an item or at a block"));
+		player.sendMessage(Methods.setColors("&6death &a| &fStops when you die"));
+		player.sendMessage(Methods.setColors("&6starve &a| &fStops when your hunger bar is empty"));
 	}
 	
 }
