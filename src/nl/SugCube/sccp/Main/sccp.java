@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import nl.SugCube.sccp.Count.CountLeap;
 import nl.SugCube.sccp.Count.RecycleClear;
+import nl.SugCube.sccp.Count.Stopwatch;
 import nl.SugCube.sccp.Listeners.ChatListener;
 import nl.SugCube.sccp.Listeners.PlayerListener;
 import nl.SugCube.sccp.Listeners.ServerListener;
@@ -31,6 +32,9 @@ public class sccp extends JavaPlugin {
 	public static int configRecycleInterval;
 	public static int leapItemId;
 	public static boolean leapItem;
+	private double answer = 0;
+	private double num1;
+	private double num2;
 	
 	//ArrayList containing cooldown-players LEAP-command
 	public static List<Player> canLeap = new ArrayList<Player>();
@@ -48,6 +52,8 @@ public class sccp extends JavaPlugin {
 	public static List<Player> swActionRightClick = new ArrayList<Player>();
 	public static List<Player> swActionDeath = new ArrayList<Player>();
 	public static List<Player> swActionStarve = new ArrayList<Player>();
+	public static List<Player> swActionProjectile = new ArrayList<Player>();
+	public static List<Player> swActionSprint = new ArrayList<Player>();
 	
 	//Calling supporting classes
 	public CountLeap cl = new CountLeap();
@@ -102,12 +108,88 @@ public class sccp extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (label.equalsIgnoreCase("stopwatch") || label.equalsIgnoreCase("sw")) {
+		if (label.equalsIgnoreCase("calc")) {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				if (player.hasPermission("sccp.calculator")) {
+					if (args.length > 1) {
+						if (args[1].equalsIgnoreCase("+")) {
+							try {
+								num1 = getNum1(args[0]);
+								num2 = getNum2(args[2]);
+								answer = num1 + num2;
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &a" + args[0] + "+" + args[2] + "=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						} else if (args[1].equalsIgnoreCase("-")) {
+							try {
+								num1 = getNum1(args[0]);
+								num2 = getNum2(args[2]);
+								answer = num1 - num2;
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &a" + args[0] + "-" + args[2] + "=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						} else if (args[1].equalsIgnoreCase("*")) {
+							try {
+								num1 = getNum1(args[0]);
+								num2 = getNum2(args[2]);
+								answer = num1 * num2;
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &a" + args[0] + "*" + args[2] + "=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						} else if (args[1].equalsIgnoreCase("/")) {
+							try {
+								num1 = getNum1(args[0]);
+								num2 = getNum2(args[2]);
+								answer = num1 / num2;
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &a" + args[0] + "/" + args[2] + "=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						} else if (args[1].equalsIgnoreCase("pow")) {
+							try {
+								num1 = getNum1(args[0]);
+								num2 = getNum2(args[2]);
+								answer = Math.pow(num1, num2);
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &a" + args[0] + " power " + args[2] + "=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						} else if (args[1].equalsIgnoreCase("sqrt")) {
+							try {
+								num1 = getNum1(args[0]);
+								answer = Math.sqrt(num1);
+								player.sendMessage(Methods.setColors("&b[&aCalc&b] &asqrt(" + args[0] + ")=&b " + answer));
+							} catch (Exception e) {
+								player.sendMessage(ChatColor.RED + "[!!] Could not parse numbers");
+							}
+						}
+					} else {
+						Help.calcHelp(player);
+					}
+				} else {
+					player.sendMessage(ChatColor.RED + "[!!] You do not have permission to perform this command!");
+				}
+			} else {
+				System.out.println("Only In-game Players can perform this command!");
+			}
+		}
+		
+		else if (label.equalsIgnoreCase("stopwatch") || label.equalsIgnoreCase("sw")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				if (player.hasPermission("sccp.stopwatch")) {
 					if (args.length > 0) {
-						if (args[0].equalsIgnoreCase("stop")) {
+						if (args[0].equalsIgnoreCase("check")) {
+							if (swPlayers.contains(player)) {
+								player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Time Check: &e" + (Stopwatch.getCount() / 10) + "," + (Stopwatch.getCount() % 10) + " &aseconds"));
+							} else {
+								player.sendMessage(ChatColor.RED + "[!!] You can only check your time when you're timing!");
+							}
+						} else if (args[0].equalsIgnoreCase("stop")) {
 							if (swPlayers.contains(player)) {
 								swPlayers.remove(player);
 								swActionDamage.remove(player);
@@ -115,6 +197,8 @@ public class sccp extends JavaPlugin {
 								swActionRightClick.remove(player);
 								swActionDeath.remove(player);
 								swActionStarve.remove(player);
+								swActionProjectile.remove(player);
+								swActionSprint.remove(player);
 							}
 						} else if (args[0].equalsIgnoreCase("start")) {
 							if (args.length == 1) {
@@ -151,6 +235,18 @@ public class sccp extends JavaPlugin {
 									swPlayers.add(player);
 									swActionStarve.add(player);
 									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you start &estarving&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("projectile")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionProjectile.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when hit by a &eprojectile&a."));
+								}
+							} else if (args[1].equalsIgnoreCase("sprint")) {
+								if (!(swPlayers.contains(player))) {
+									swPlayers.add(player);
+									swActionSprint.add(player);
+									player.sendMessage(Methods.setColors("&a[&eStopwatch&a] Stopwatch activated. Stop when you &esprint&a."));
 								}
 							} else {
 								Help.stopwatchHelp(player);
@@ -302,6 +398,24 @@ public class sccp extends JavaPlugin {
 		}
 		
 		return false;
+	}
+	
+	public double getNum2(String x) {
+		if (x.equalsIgnoreCase("ans")) {
+			num2 = answer;
+		} else {
+			num2 = Double.parseDouble(x);
+		}
+		return num2;
+	}
+	
+	public double getNum1(String x) {
+		if (x.equalsIgnoreCase("ans")) {
+			num1 = answer;
+		} else {
+			num1 = Double.parseDouble(x);
+		}
+		return num1;
 	}
 	
 	public static void clearRecycle() {

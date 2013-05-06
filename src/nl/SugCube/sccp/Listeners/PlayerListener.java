@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 public class PlayerListener implements Listener {
 	
@@ -43,6 +44,16 @@ public class PlayerListener implements Listener {
 		deleteLeap = b;
 	}
 	
+	//STOPWATCH-alternative stop
+		@EventHandler
+		public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
+			Player player = (Player) event.getPlayer();
+			if (sccp.swActionSprint.contains(player)) {
+	        	sccp.swPlayers.remove(player);
+	        	sccp.swActionSprint.remove(player);
+	        }
+		}
+		
 	//STOPWATCH-alternative stop
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
@@ -105,6 +116,12 @@ public class PlayerListener implements Listener {
         	if (sccp.swActionDamage.contains(player)) {
             	sccp.swPlayers.remove(player);
             	sccp.swActionDamage.remove(player);
+            }
+        }
+        if (event.getCause() == DamageCause.PROJECTILE) {
+        	if (sccp.swActionProjectile.contains(player)) {
+            	sccp.swPlayers.remove(player);
+            	sccp.swActionProjectile.remove(player);
             }
         }
         if (sccp.swActionDamage.contains(player)) {

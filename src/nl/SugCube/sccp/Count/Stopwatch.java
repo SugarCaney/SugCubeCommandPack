@@ -9,12 +9,16 @@ public class Stopwatch implements Runnable {
 
 	public static sccp plugin;
 	private Player player;
-	private int count = -60;
+	public static int count = -60;
 	public boolean sendMessage = false;
 	
 	public Stopwatch(Player p) {
 		player = p;
 		count = -60;
+	}
+	
+	public static int getCount() {
+		return count;
 	}
 	
 	public void run() {

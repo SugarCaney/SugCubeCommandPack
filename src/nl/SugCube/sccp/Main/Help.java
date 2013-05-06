@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 public class Help {
 	
+	public static sccp plugin;
 	public static boolean leapItem = false;
 	public static int leapId = 0;
 	
@@ -25,7 +26,7 @@ public class Help {
 				ChatColor.GREEN + "}==-----" +
 				ChatColor.YELLOW + "**");
 		player.sendMessage(
-				ChatColor.GOLD + "Plugin made by MrSugarCaney");
+				ChatColor.GOLD + "Plugin made by MrSugarCaney (vREC-0.2.1)");
 		if (player.hasPermission("sccp.shoot")) {
 			player.sendMessage(
 					ChatColor.YELLOW + "/shoot [player] " +
@@ -62,9 +63,37 @@ public class Help {
 		}
 		if (player.hasPermission("sccp.stopwatch")) {
 			player.sendMessage(
-					ChatColor.YELLOW + "/sw <start|stop> [stop cause] " +
-					ChatColor.ITALIC + ChatColor.AQUA + "Use the server's stopwatch");
+					ChatColor.YELLOW + "/sw <start|stop|check> [stop cause] " +
+					ChatColor.ITALIC + ChatColor.AQUA + "Use stopwatch");
 		}
+		if (player.hasPermission("sccp.calculator")) {
+			player.sendMessage(
+					ChatColor.YELLOW + "/calc <number1> <operator> <number2> " +
+					ChatColor.ITALIC + ChatColor.AQUA + "Calculator");
+		}
+	}
+	
+	//Return help by incorrectly using /calc
+	public static void calcHelp(Player player) {
+		player.sendMessage(
+				ChatColor.YELLOW + "**" +
+				ChatColor.GREEN + "-----=={" +
+				ChatColor.YELLOW + " SugCubeCommandPack-Help " +
+				ChatColor.GREEN + "}==-----" +
+				ChatColor.YELLOW + "**");
+		player.sendMessage(
+				ChatColor.GOLD + "Usage: /calc <number1> <operator> <number2>");
+		player.sendMessage(
+				ChatColor.AQUA + "Possible operators:");
+		player.sendMessage(Methods.setColors("&6 + &a| &fPlus"));
+		player.sendMessage(Methods.setColors("&6 - &a| &fMinus"));
+		player.sendMessage(Methods.setColors("&6 * &a| &fTimes"));
+		player.sendMessage(Methods.setColors("&6 / &a| &fDivide"));
+		player.sendMessage(Methods.setColors("&6pow &a| &fPower"));
+		player.sendMessage(Methods.setColors("&6sqrt &a| &fSquare Root, 2nd number not needed"));
+		player.sendMessage(
+				ChatColor.AQUA + "Possible variables (number):");
+		player.sendMessage(Methods.setColors("&6ans &a| &fRepresents previous answer"));
 	}
 	
 	//Return help by incorrectly using /mutes
@@ -88,14 +117,12 @@ public class Help {
 				ChatColor.GREEN + "}==-----" +
 				ChatColor.YELLOW + "**");
 		player.sendMessage(
-				ChatColor.GOLD + "Usage: /sw <start|stop> [alternative stop cause]");
+				ChatColor.GOLD + "Usage: /sw <start|stop|check> [alternative stop cause]");
 		player.sendMessage(
 				ChatColor.AQUA + "Alternative causes (not required)");
-		player.sendMessage(Methods.setColors("&6damage &a| &fStops by taking damage"));
-		player.sendMessage(Methods.setColors("&6leftclick &a| &fStops by left clicking"));
-		player.sendMessage(Methods.setColors("&6rightclick &a| &fStops by right clicking with an item or at a block"));
-		player.sendMessage(Methods.setColors("&6death &a| &fStops when you die"));
-		player.sendMessage(Methods.setColors("&6starve &a| &fStops when your hunger bar is empty"));
+		player.sendMessage(Methods.setColors("&6damage &f(taking damage), &6leftclick &f(left click), &6rightclick &f(right click), " +
+				"&6death &f(when died), &6starve &f(no hungerpoints left), &6projectile &f(hit by projectile), " +
+				"&6sprint &f(toggle sprint)"));
 	}
 	
 }

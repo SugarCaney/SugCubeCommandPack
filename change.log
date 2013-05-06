@@ -1,3 +1,10 @@
+**-----{ REC-0.2.1 }-----**
++ Added '/sw' check command, check your time
++ Added simple calculator
++ Added stopwatch stop cause: projectile
++ Added stopwatch stop cause: sprint
+~ Tweaked '/sw' help-screen
+
 **-----{ BET-0.2.0 }-----**
 + Added stopwatch functionality
 	+ Stopwatch can be stopped on command
